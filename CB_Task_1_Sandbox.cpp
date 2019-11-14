@@ -14,7 +14,52 @@
 */
 void forward_wls(unsigned char node)
 {
+	int l = ADC_Conversion(1);
+	int m = ADC_Conversion(2);
+	int r = ADC_Conversion(3);
+	int nodes = node;
+	int node_counter = 0;
+	velocity(50, 50);
+	while (node_counter != nodes) {
+		l = ADC_Conversion(1);
+		m = ADC_Conversion(2);
+		r = ADC_Conversion(3);
 
+		if (l == 0 && m == 255 && r == 0) {
+			forward();
+		}
+		else if (l == 0 && m == 0 && r == 255) {
+			right();
+			_delay_ms(2);
+		}
+		else if(l ==  0 && m == 255 && r == 255)
+		{
+			right();
+			_delay_ms(1);
+		}
+		else if (l == 255 && m == 255 && r == 0) {
+			left();
+			_delay_ms(1);
+		}
+		else if (l == 255 && m == 0 && r == 0) {
+			left();
+			_delay_ms(2);
+		}
+		else if( l == 255 && m == 255 && r == 255)
+		{
+			forward();
+			_delay_ms(8);
+			l = ADC_Conversion(1);
+			m = ADC_Conversion(2);
+			r = ADC_Conversion(3);
+			if (l == 255 && m == 255 && r == 255) {
+				printf("%d",node_counter);
+				node_counter++;
+				forward();
+				_delay_ms(200);
+			}
+		}
+	}
 }
 /*
 *
@@ -27,7 +72,15 @@ void forward_wls(unsigned char node)
 */
 void left_turn_wls(void)
 {
-
+	velocity(50, 50);
+	left();
+	_delay_ms(25);
+	int l = ADC_Conversion(1);
+	while (l != 255)
+	{
+		l = ADC_Conversion(1);
+	}
+	stop();
 }
 
 /*
@@ -40,7 +93,15 @@ void left_turn_wls(void)
 */
 void right_turn_wls(void)
 {
-
+	velocity(50, 50);
+	right();
+	_delay_ms(25);
+	int r = ADC_Conversion(3);
+	while (r != 255) {
+		r = ADC_Conversion(3);
+		printf("%d", r);
+	}
+	stop();
 }
 
 /*
@@ -53,83 +114,23 @@ void right_turn_wls(void)
 */
 void e_shape(void)
 {
-	unsigned char a = ADC_Conversion(1);
-	unsigned char b = ADC_Conversion(2);
-	unsigned char c = ADC_Conversion(3);
-	int x = 0;
-	while (1)
-	{
-		unsigned char a = ADC_Conversion(1);
-		unsigned char b = ADC_Conversion(2);
-		unsigned char c = ADC_Conversion(3);
-		switch (x)
-		{
-		case 0:
-
-			while (a == 0 && b == 255 && c == 0)
-			{
-				forward();
-				_delay_ms(6500);
-			}
-			break;
-
-
-		case 1:
-			right();
-			_delay_ms(450);
-
-			while (a == 0 && b == 255 && c == 0)
-			{
-				forward();
-			}
-			break;
-		case 2:
-
-			while (a == 0 && b == 255 && c == 0)
-			{
-				forward();
-			}
-			break;
-		case 3:
-			right();
-			_delay_ms(450);
-
-			while (a == 0 && b == 255 && c == 0)
-			{
-				forward();
-			}
-			break;
-		case 4:
-			right();
-			_delay_ms(450);
-
-			while (a == 0 && b == 255 && c == 0)
-			{
-				forward();
-			}
-			break;
-		case 5:
-			right();
-			_delay_ms(450);
-
-			while (a == 0 && b == 255 && c == 0)
-			{
-				forward();
-			}
-			break;
-		default:
-			stop();
-			break;
-
-		}
-		if ( a == 255 && b == 255 && c == 255)
-		{
-			x = x + 1;
-		}
-
-
-	}
-	
+	printf("E Shape Called");
+	forward_wls(1);
+	stop();
+	_delay_ms(2);
+	printf("E Shape Called");
+	right_turn_wls();
+	forward_wls(2);
+	stop();
+	_delay_ms(2);
+	right_turn_wls();
+	forward_wls(1);
+	stop();
+	_delay_ms(2);
+	right_turn_wls();
+	forward_wls(1);
+	stop();
+	_delay_ms(50000);
 }
 
 
@@ -143,44 +144,6 @@ void e_shape(void)
 */
 void Task_1_1(void)
 {
-	forward();
-	_delay_ms(500);
-
-	right();
-	_delay_ms(450);
-
-	forward();
-	_delay_ms(8000);
-
-	left();
-	_delay_ms(450);
-
-	forward();
-	_delay_ms(500);
-
-	soft_right();
-	_delay_ms(450);
-	
-	forward();
-	_delay_ms(500);
-		
-	soft_left();
-	_delay_ms(450);
-
-	forward();
-	_delay_ms(900);
-
-	soft_right();
-	_delay_ms(900);
-	
-	forward();
-	_delay_ms(500);
-
-    left();
-	_delay_ms(450);
-
-	forward();
-	_delay_ms(6500);
 
 }
 
